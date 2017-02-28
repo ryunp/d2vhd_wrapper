@@ -24,10 +24,11 @@
 ; 2) Gather volume info
 ; 3) Reverse order of system volumes
 ; 4) Check volumes based on given user data before working with Disk2vhd
-; 5) Start Disk2vhd.exe Gui
-; 6) Enable desired volumes for backup
-; 7) Manipulate backup options
-; 8) Start the backup
+; 5) Early Exit Conditions
+; 6) Start Disk2vhd.exe Gui
+; 7) Enable desired volumes for backup
+; 8) Manipulate backup options
+; 9) Start the backup
 
 
 
@@ -37,6 +38,13 @@ if not A_IsAdmin {
     ExitApp
 }
 
+
+disk2vhd_file := "Disk2vhd.exe"
+if not (FileExist(disk2vhd_file)) {
+    
+    msgbox,,, % disk2vhd_file " not found!", 5
+    ExitApp
+}
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -219,7 +227,9 @@ loop, % volumeListSorted.Length()
     }
 }
 
-; Early exit conditions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 5) Early Exit Conditions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 if (debugMode) {
 
@@ -231,20 +241,20 @@ if (debugMode) {
 
 if not (backupFlag) {
 
-    Msgbox No matching volumes
+    Msgbox,,, No matching volumes, 5
     ExitApp
 }
 
 if ((!outputFile) && (!testMode)) {
 
-    MsgBox, No valid output file
+    MsgBox,,, No valid output file, 5
     exitApp
 }
 
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; 5) Start Disk2vhd.exe Gui
+; 6) Start Disk2vhd.exe Gui
 ; Must be in the same directory as AHK script. Will close an existing
 ; Disk2vhd.exe window. Does not account for multiple prev windows.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -261,13 +271,13 @@ regKey := "Software\Sysinternals\Disk2Vhd"
 RegWrite, REG_SZ, HKCU, % regKey, VhdFile, % ""
 
 ; Run Disk2vhd.exe and wait for window to appear
-Run, disk2vhd.exe,,, winPID
+Run, % disk2vhd_file,,, winPID
 WinWait, % "ahk_class Disk2VhdClass"
 
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; 6) Enable desired volumes for backup
+; 7) Enable desired volumes for backup
 ; Use tab selection to focus ListView control, then arrows to select
 ; the proper items in list. From there use space to unselect items.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -299,7 +309,7 @@ for idx, curVol in volumeListSorted {
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; 7) Manipulate backup options
+; 8) Manipulate backup options
 ; Apply command line options
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -333,7 +343,7 @@ if not (useShadowCopy)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; 8) Start the backup
+; 9) Start the backup
 ; RIP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

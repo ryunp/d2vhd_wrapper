@@ -8,10 +8,12 @@ The biggest difference between this and Disk2Vhd's command line interface is vol
 This means you can now backup arbitrary volumes, such as C:\ and "System Reserved", since the system drive won't have a drive letter.
 
 ### Usage
-d2vhd_wrapper.exe [SWITCHES] [TERMS] OUTPUT_FILE  
+[Disk2Vhd.exe](https://technet.microsoft.com/en-us/sysinternals/ee656415.aspx) needs to be in the same directory as this wrapper program.
+
+d2vhd_wrapper.exe [SWITCHES] [TERMS] OUTPUT_FILE
 
 ### Switches
-Switches are a character, or combination of characters, proceded with a forward slash.
+Switches are a character, or combination of characters, preceded with a forward slash.
 
 Switch|Description
 ---|---
