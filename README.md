@@ -19,13 +19,13 @@ Switch|Description
 ---|---
 /x|Do not use Vhdx
 /s|Do not use Volume Shadow Copy
-/u|Test mode (skip backup step, no output file required)
+/t|Test mode (skip backup step, no output file required)
 /d|Debug mode (show debug info panel)
 /?|Usage text
 
 Switches control GUI options. Flagging a switch for vhdx or shadow copy mode will disable that functionality.
 
-Switches can be used discretely or combined, ie: '/s /d' or '/sd'.
+Switches can be used discretely or in combination, ie: '/s /d' or '/sd'.
 
 Test mode will skip the backup step. This allows confirmation of drive selections before actual backups are run.
 
