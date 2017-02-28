@@ -10,7 +10,7 @@ This means you can now backup arbitrary volumes, such as C:\ and "System Reserve
 ### Usage
 [Disk2Vhd.exe](https://technet.microsoft.com/en-us/sysinternals/ee656415.aspx) needs to be in the same directory as this wrapper program.
 
-d2vhd_wrapper.exe [SWITCHES] [TERMS] OUTPUT_FILE
+    d2vhd_wrapper.exe [SWITCHES] [TERMS] OUTPUT_FILE
 
 ### Switches
 Switches are a character, or combination of characters, preceded with a forward slash.
@@ -50,20 +50,20 @@ A token ending with '.vhd[x]' is taken as the output file.
 ### Example Program Usage
 Open debug info panel and perform a test mode default term selection:
 
-    d2vhd.ahk /dt
+    d2vhd_wrapper.exe /dt
 
 Test mode run of a volume labeled "OS Disk" to make sure selection works as expected:
 
-    d2vhd.ahk /t "OS Disk"
+    d2vhd_wrapper.exe /t "OS Disk"
 
 Backup all volumes:
 
-    d2vhd.ahk * d:\allVolumeBackup.vhdx
+    d2vhd_wrapper.exe * d:\allVolumeBackup.vhdx
 
 Backup default volumes:
 
-    d2vhd.ahk e:\some\place\without\spaces\default_backup.vhdx
+    d2vhd_wrapper.exe e:\some\place\without\spaces\default_backup.vhdx
 
 Backup drive Z: and any volumes labeled "adultlabel" without using vhdx and shadow volume copy:
 
-    d2vhd.ahk /x /s z:\ adultlabel "f:\my backup\with spaces\adultVolumes.vhd"
+    d2vhd_wrapper.exe /x /s z:\ adultlabel "f:\my backup\with spaces\adultVolumes.vhd"
