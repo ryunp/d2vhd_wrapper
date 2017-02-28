@@ -239,11 +239,6 @@ if (debugMode) {
         return
 }
 
-if not (backupFlag) {
-
-    Msgbox,,, No matching volumes, 5
-    ExitApp
-}
 
 if ((!outputFile) && (!testMode)) {
 
@@ -251,6 +246,12 @@ if ((!outputFile) && (!testMode)) {
     exitApp
 }
 
+
+if not (backupFlag) {
+
+    Msgbox,,, No matching volumes, 5
+    ExitApp
+}
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
