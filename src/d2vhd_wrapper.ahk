@@ -154,14 +154,20 @@ volume := ""
 
 ; Pull out system volumes (all identical Names starting with "\\?\...")
 sysVols := []
-for i, vol in volumeList {
+idx := 1
+while (idx <= volumeList.Length()) {
 
+    vol := volumeList[idx]
     if RegExMatch(vol.Name, "\\\\?\\") {
 
         sysVols.push(vol)
-        volumeList.RemoveAt(i)
+        volumeList.RemoveAt(idx)
+    } else {
+
+        idx++
     }
 }
+
 names := []
 for i,v in volumeList
     names.push(v.Name)
@@ -533,11 +539,11 @@ array_reverse(array, start:=0, end:="NULL") {
 }
 
 
-; variables 0-n (yes, %0%) hold arg data. Variable 0 being count of args:
+; Add arguments to given array and return count
+; Variables 0-n (yes, %0%) hold arg data. Variable 0 being count of args:
 getArgs(ByRef argv) {
     global
 
-    ; loop for amount of args, add to given array and return count
     Loop, %0%
     {
         argv[A_Index] := %A_Index%
