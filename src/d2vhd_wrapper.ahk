@@ -102,7 +102,7 @@ for i, arg in argv {
         
         allVolumeFlag := true
 
-    } else if (RegExMatch(arg, "\.vhdx?$")) {
+    } else if (RegExMatch(arg, "i)\.vhdx?$")) {
         ; Output file
 
         outputFile := arg
