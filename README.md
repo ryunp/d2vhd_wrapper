@@ -27,7 +27,7 @@ Switches control GUI options. Flagging a switch for vhdx or shadow copy mode wil
 
 Switches can be used discretely or in combination, ie: '/s /d' or '/sd'.
 
-Test mode will skip the backup step. This allows confirmation of drive selections before actual backups are run.
+Test mode will skip the backup step. This allows confirmation of volume selections before actual backups are run.
 
 Debug mode will create a gui panel with internal state, term matching results, and volume info.
 
@@ -40,7 +40,7 @@ Term|Description
 \*|Select all volumes
 \<string\>|RegEx'd against VOLUME and LABEL fields
 
-Zero, one, or multiple terms can be specified, not specifying any terms will fall back to defaults. An asterisk will select all available drives.
+Zero, one, or multiple terms can be specified, not specifying any terms will fall back to defaults. An asterisk will select all available volumes.
 
 Terms are matched against volume Name and Label columns in Disk2Vhd's volume listview.
 
@@ -64,6 +64,6 @@ Backup default volumes:
 
     d2vhd_wrapper.exe e:\some\place\without\spaces\default_backup.vhdx
 
-Backup drive Z: and any volumes labeled "adultlabel" without using vhdx and shadow volume copy:
+Backup volume Z: and any volumes labeled "adultlabel" without using vhdx and shadow volume copy:
 
     d2vhd_wrapper.exe /x /s z:\ adultlabel "f:\my backup\with spaces\adultVolumes.vhd"
