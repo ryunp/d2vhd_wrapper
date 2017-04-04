@@ -6,6 +6,7 @@
 ;  /x  Do not use Vhdx
 ;  /s  Do not use Volume Shadow Copy 
 ;  /t  Test mode (skip backup, no output file required)
+;  /p  Keep backup results open after completion
 ;  /d  Debug mode (show debug info panel)
 ;  /?  Usage text
 
@@ -29,6 +30,7 @@
 ; 7) Enable desired volumes for backup
 ; 8) Manipulate backup options
 ; 9) Start the backup
+; 10) Exit Behavior
 
 
 
@@ -63,6 +65,7 @@ outputFile := ""
 debugMode := false
 testMode := false
 allVolumeFlag := false
+exitAfterBackup := true
 defaultIncludeKeywords := ["C:\", "System Reserved"]
 includeKeywords := []
 for i, arg in argv {
@@ -89,6 +92,10 @@ for i, arg in argv {
             ;test run
             if (char = "t")
                 testMode := true
+
+            ;test run
+            if (char = "p")
+                exitAfterBackup := false
 
             ;usage
             if (char = "?") {
@@ -369,7 +376,30 @@ if not (testMode) {
     ;    Send {Enter}
 }
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 10) Exit Behavior
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+if (exitAfterBackup) {
+
+    SetTitleMatchMode, RegEx
+
+    while(true) {
+
+        WinGetText, completed, i)Disk2Vhd - Sysinternals, completed successfully
+
+        if (completed) {
+
+            WinClose, % "ahk_class Disk2VhdClass"
+            break
+        }
+    }
+}
+
 ExitApp
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Debug
@@ -476,8 +506,9 @@ usage() {
 (
 Usage: %A_ScriptName% [/xstd?] [*|TERM...] OUTPUT_FILE
   /x  Do not use Vhdx
-  /s  Do not use Volume Shadow Copy 
+  /s  Do not use Volume Shadow Copy
   /t  Test mode (skip backup, no output file required)
+  /p  Keep backup results open after completion
   /d  Debug mode (show debug info panel)
   /?  Usage text
 
