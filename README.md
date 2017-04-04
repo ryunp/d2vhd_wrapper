@@ -12,6 +12,13 @@ This means you can now backup arbitrary volumes, such as C:\ and "System Reserve
 
     d2vhd_wrapper.exe [SWITCHES] [TERMS] OUTPUT_FILE
 
+The logic is broken into multiple steps:
+- check for preconditions
+- gather volume information
+- apply given parameters against volume data
+- backup via Disk2Vhd gui
+- teardown
+
 ### Switches
 Switches are a character, or combination of characters, preceded with a forward slash.
 
@@ -21,6 +28,7 @@ Switch|Description
 /s|Do not use Volume Shadow Copy
 /t|Test mode (skip backup step, no output file required)
 /d|Debug mode (show debug info panel)
+/p|Keep GUI open after backup completion
 /?|Usage text
 
 Switches control GUI options. Flagging a switch for vhdx or shadow copy mode will disable that functionality.
@@ -31,39 +39,48 @@ Test mode will skip the backup step. This allows confirmation of volume selectio
 
 Debug mode will create a gui panel with internal state, term matching results, and volume info.
 
-### Search Terms
-Search terms are anything not parsed as a switch or output file.
+### Output File
+A token ending with '.vhd[x]' is taken as the output file.
+
+### Volume Selection Terms
+Volume selection terms are anything not parsed as a switch (starting with '/') or output file (ending with '.vhd[x]'). If no terms are given, default selection terms are used.
 
 Term|Description
 ---|---
 \<none\>|Defaults to c:\ and "System Reserved"
 \*|Select all volumes
-\<string\>|RegEx'd against VOLUME and LABEL fields
+\<any string\>|RegEx'd against VOLUME and LABEL fields
 
 Zero, one, or multiple terms can be specified, not specifying any terms will fall back to defaults. An asterisk will select all available volumes.
 
 Terms are matched against volume Name and Label columns in Disk2Vhd's volume listview.
 
-### Output File
-A token ending with '.vhd[x]' is taken as the output file.
-
 ### Example Program Usage
+
 Open debug info panel and perform a test mode default term selection:
 
     d2vhd_wrapper.exe /dt
 
-Test mode run of a volume labeled "OS Disk" to make sure selection works as expected:
+Test run to make sure selection(s) work as expected:
 
     d2vhd_wrapper.exe /t "OS Disk"
 
-Backup all volumes:
+Just 'System Reserved' without closing the GUI after completion:
+
+    d2vhd_wrapper.exe /p "System Reserved" d:\test.vhd
+
+All volumes:
 
     d2vhd_wrapper.exe * d:\allVolumeBackup.vhdx
 
-Backup default volumes:
+Default volumes:
 
-    d2vhd_wrapper.exe e:\some\place\without\spaces\default_backup.vhdx
+    d2vhd_wrapper.exe e:\no\spaces\default_bup.vhdx
 
-Backup volume Z: and any volumes labeled "adultlabel" without using vhdx and shadow volume copy:
+Default volumes (must be explicit) plus another 'Videos' volume:
 
-    d2vhd_wrapper.exe /x /s z:\ adultlabel "f:\my backup\with spaces\adultVolumes.vhd"
+    d2vhd_wrapper.exe Videos c:\ "System Reserved" e:\multipleVolumes.vhdx
+
+Volume 'Z:' and 'adultlabel' volumes without using vhdx and shadow volume copy:
+
+    d2vhd_wrapper.exe /x /s z:\ adultlabel "f:\spaces\need quotes\specificVolumes.vhd"
