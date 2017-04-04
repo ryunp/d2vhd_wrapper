@@ -2,11 +2,11 @@
 ; Ghetto Disk2vhd.exe custom partition selector
 ;
 ;
-; Usage: d2vhd.ahk [/xstd?] [*|TERM...] OUTPUT_FILE
+; Usage: d2vhd.ahk [/xstpd?] [*|TERM...] OUTPUT_FILE
 ;  /x  Do not use Vhdx
 ;  /s  Do not use Volume Shadow Copy 
 ;  /t  Test mode (skip backup, no output file required)
-;  /p  Keep backup results open after completion
+;  /p  Keep GUI open after backup completion
 ;  /d  Debug mode (show debug info panel)
 ;  /?  Usage text
 
@@ -16,11 +16,11 @@
 
 ; Ex: d2vhd.ahk /dt
 ; Ex: d2vhd.ahk * d:\allVolumeBackup.vhdx
-; Ex: d2vhd.ahk e:\some\place\without\spaces\default_backup.vhdx
-; Ex: d2vhd.ahk /x /s z:\ adultlabel "f:\my backup\with spaces\adultVolumes.vhd"
-;
-;
-; Eight critical ste[s] for prepping and backing up
+; Ex: d2vhd.ahk /x /s z:\ adultlabel "f:\spaces\need quotes\specificVolume.vhd"
+; Ex: d2vhd.ahk Videos c:\ "System Reserved" e:\multipleVolumes.vhdx
+
+
+; Eight critical step[s] for prepping and backing up
 ; 1) Command line parsing
 ; 2) Gather volume info
 ; 3) Reverse order of system volumes
@@ -31,22 +31,6 @@
 ; 8) Manipulate backup options
 ; 9) Start the backup
 ; 10) Exit Behavior
-
-
-
-if not A_IsAdmin {
-
-    MsgBox,,, Needs Admin Privileges, 5
-    ExitApp
-}
-
-
-disk2vhd_file := "Disk2vhd.exe"
-if not (FileExist(disk2vhd_file)) {
-    
-    msgbox,,, % disk2vhd_file " not found!", 5
-    ExitApp
-}
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -123,6 +107,22 @@ for i, arg in argv {
 
 ; If no arguments passed, fall back to defaults
 includeKeywords := includeKeywords.Length() ? includeKeywords : defaultIncludeKeywords
+
+
+
+; Preconditions check
+if not A_IsAdmin {
+
+    MsgBox,,, Needs Admin Privileges, 5
+    ExitApp
+}
+
+disk2vhd_file := "Disk2vhd.exe"
+if not (FileExist(disk2vhd_file)) {
+    
+    msgbox,,, % disk2vhd_file " not found!", 5
+    ExitApp
+}
 
 
 
@@ -467,7 +467,7 @@ DEBUG_ACTION() {
 
 
     ; Gather various app flags
-    appFlags := ["useVhdx", "useShadowCopy", "debugMode", "testMode"]
+    appFlags := ["useVhdx", "useShadowCopy", "debugMode", "testMode", "allVolumeFlag", "exitAfterBackup"]
     appFlagStrBld := []
     for i, v in appFlags
         appFlagStrBld.push(v " = " %v%)
@@ -504,11 +504,11 @@ DEBUG_ACTION() {
 usage() {
     msg = 
 (
-Usage: %A_ScriptName% [/xstd?] [*|TERM...] OUTPUT_FILE
+Usage: %A_ScriptName% [/xstpd?] [*|TERM...] OUTPUT_FILE
   /x  Do not use Vhdx
   /s  Do not use Volume Shadow Copy
   /t  Test mode (skip backup, no output file required)
-  /p  Keep backup results open after completion
+  /p  Keep GUI open after backup completion
   /d  Debug mode (show debug info panel)
   /?  Usage text
 
@@ -518,8 +518,8 @@ Usage: %A_ScriptName% [/xstd?] [*|TERM...] OUTPUT_FILE
 
 Ex: d2vhd.ahk /dt
 Ex: d2vhd.ahk * d:\allVolumeBackup.vhdx
-Ex: d2vhd.ahk e:\some\place\without\spaces\default_backup.vhdx
-Ex: d2vhd.ahk /x /s z:\ adultlabel "f:\my backup\with spaces\adultVolumes.vhd"
+Ex: d2vhd.ahk /x /s z:\ adultlabel "f:\spaces\need quotes\specificVolume.vhd"
+Ex: d2vhd.ahk Videos c:\ "System Reserved" e:\multipleVolumes.vhdx
 Ryan Paul
 )
 
